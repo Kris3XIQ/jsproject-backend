@@ -128,7 +128,9 @@ router.post("/sellstock", (req, res) => {
             if (err) {
                 return res.status(500).send("Something on the serer went wrong");
             }
+            console.log(row.amount);
             if (row.amount > 0) {
+                console.log("inne");
                 userFunc.sellStock([email, stock, -1], (err) => {
                     if (err) {
                         return res.status(500).send("Something on the serer went wrong");
@@ -136,7 +138,7 @@ router.post("/sellstock", (req, res) => {
                     return res.status(200);
                 });
             } else {
-                return res.status(500).send("You don't have enough stocks");
+                return res.send("You don't have enough stocks");
             }
         });
     });
