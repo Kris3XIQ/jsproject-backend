@@ -37,7 +37,6 @@ router.post("/:game/buystock", function(req, res) {
     });
 })
 
-
 router.get("/games/graph", function(req, res) {
     // console.log("hej")
     // io.on("connect", (socket) => {

@@ -21,6 +21,17 @@ router.get("/", (req, res) => {
     res.send(data);
 });
 
+router.post("/checkbalance", (req, res) => {
+    const email = req.body.email;
+    userFunc.getFunds([email], (err, funds) => {
+        if (err) {
+            return res.status(500).send("Something on the serer went wrong");
+        }
+        res.status(200)
+            .send(funds);
+    });
+});
+
 router.post("/getfunds", (req, res) => {
     const email = req.body.email;
     var accountInfo = {
@@ -99,6 +110,28 @@ router.post("/addfunds", (req, res) => {
         });
     });
 });
+
+router.post("/sellstock", (req, res) => {
+    const email = req.body.email;
+    const stock = req.body.stock;
+    const funds = req.body.price;
+    userFunc.verifyUserFunds(email, (err, userFunds) => {
+        if (err) {
+            return res.status(500).send("Something on the server went wrong!");
+        }
+        userFunc.updateFunds([email, funds], (err) => {
+            if (err) {
+                return res.status(500).send("Something on the serer went wrong");
+            }
+            userFunc.sellStock([email, stock, -1], (err) => {
+                if (err) {
+                    return res.status(500).send("Something on the serer went wrong");
+                }
+                return res.status(200);
+            });
+        });
+    });
+})
 
 router.get("/register", (req, res) => {
     let response = "Not logged in";

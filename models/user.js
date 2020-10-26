@@ -84,6 +84,12 @@ const buyStock = (stocks, cb) => {
     });
 }
 
+const sellStock = (stocks, cb) => {
+    return db.run('INSERT INTO stocks (email, stock, amount) VALUES (?,?,?)', stocks, (err) => {
+        cb(err);
+    });
+}
+
 const getStocks = (email, cb) => {
     return db.all(`SELECT * FROM stocks WHERE email = ?`, [email], (err, rows) => {
         cb(err, rows);
@@ -96,6 +102,7 @@ module.exports = {
     updateFunds: updateFunds,
     getFunds: getFunds,
     buyStock: buyStock,
+    sellStock: sellStock,
     getStocks: getStocks,
     getCOD: getCOD,
     getCyberpunk: getCyberpunk,
