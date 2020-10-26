@@ -124,7 +124,7 @@ router.post("/sellstock", (req, res) => {
         if (err) {
             return res.status(500).send("Something on the serer went wrong");
         }
-        userFunc.verifyUserStocks([email, stock], (err, row) => {
+        userFunc.verifyUserStocks([stock, email], (err, row) => {
             if (err) {
                 return res.status(500).send("Something on the serer went wrong");
             }

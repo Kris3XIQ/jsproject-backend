@@ -24,8 +24,8 @@ const verifyUserFunds = (email, cb) => {
     });
 }
 
-const verifyUserStocks = (email, cb) => {
-    return db.get(`SELECT stock, sum(amount) FROM stocks WHERE stock = ? AND email = ?`, email, (err, row) => {
+const verifyUserStocks = (stock, cb) => {
+    return db.get(`SELECT stock, sum(amount) AS amount FROM stocks WHERE stock = ? AND email = ?`, stock, (err, row) => {
         cb(err, row);
     });
 }
