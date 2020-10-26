@@ -118,26 +118,26 @@ router.post("/sellstock", (req, res) => {
     console.log(email);
     console.log(stock);
     console.log(funds);
-    userFunc.verifyUserFunds(email, (err, userFunds) => {
+    // userFunc.verifyUserFunds(email, (err, userFunds) => {
+    //     if (err) {
+    //         return res.status(500).send("Something on the server went wrong!");
+    //     }
+    //     console.log("VERIFY")
+    userFunc.updateFunds([email, funds], (err) => {
         if (err) {
-            return res.status(500).send("Something on the server went wrong!");
+            return res.status(500).send("Something on the serer went wrong");
         }
-        console.log("VERIFY")
-        userFunc.updateFunds([email, funds], (err) => {
+        console.log("UPDATE")
+        userFunc.sellStock([email, stock, -1], (err) => {
             if (err) {
                 return res.status(500).send("Something on the serer went wrong");
             }
-            console.log("UPDATE")
-            userFunc.sellStock([email, stock, -1], (err) => {
-                if (err) {
-                    return res.status(500).send("Something on the serer went wrong");
-                }
-                console.log("SELL")
-                return res.status(200);
-            });
+            console.log("SELL")
+            return res.status(200);
         });
     });
-})
+    // });
+});
 
 router.get("/register", (req, res) => {
     let response = "Not logged in";
