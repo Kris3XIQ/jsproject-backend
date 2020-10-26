@@ -24,6 +24,12 @@ const verifyUserFunds = (email, cb) => {
     });
 }
 
+const verifyUserStocks = (email, cb) => {
+    return db.get(`SELECT stock, sum(amount) FROM stocks WHERE stock = ? AND email = ?`, email, (err, row) => {
+        cb(err, row);
+    });
+}
+
 const updateFunds = (funds, cb) => {
     return db.run('INSERT INTO funds (email, currency) VALUES (?,?)', funds, (err) => {
         cb(err);
@@ -110,5 +116,6 @@ module.exports = {
     getD2: getD2,
     getStellaris: getStellaris,
     getWoW: getWoW,
-    verifyUserFunds: verifyUserFunds
+    verifyUserFunds: verifyUserFunds,
+    verifyUserStocks: verifyUserStocks
 };

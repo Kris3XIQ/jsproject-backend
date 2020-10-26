@@ -124,11 +124,17 @@ router.post("/sellstock", (req, res) => {
         if (err) {
             return res.status(500).send("Something on the serer went wrong");
         }
-        userFunc.sellStock([email, stock, -1], (err) => {
+        userFunc.verifyUserStocks([email, stock], (err, row) => {
             if (err) {
                 return res.status(500).send("Something on the serer went wrong");
             }
-            return res.status(200);
+            console.log(row);
+            userFunc.sellStock([email, stock, -1], (err) => {
+                if (err) {
+                    return res.status(500).send("Something on the serer went wrong");
+                }
+                return res.status(200);
+            });
         });
     });
     // });
