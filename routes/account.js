@@ -14,6 +14,92 @@ const userFunc = require("../models/user");
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
+router.get("/", (req, res) => {
+    data = {
+        "name": "HEJ"
+    };
+    res.send(data);
+});
+
+router.post("/getfunds", (req, res) => {
+    const email = req.body.email;
+    var accountInfo = {
+        "funds": "",
+        "stocks": {},
+        "cod": {},
+        "cyberpunk": {},
+        "d2": {},
+        "nw": {},
+        "stellaris": {},
+        "wow": {}
+    };
+    userFunc.getFunds([email], (err, funds) => {
+        if (err) {
+            return res.status(500).send("Something on the serer went wrong");
+        }
+        accountInfo.funds = funds;
+        userFunc.getStocks([email], (err, stocks) => {
+            if (err) {
+                return res.status(500).send("Something on the serer went wrong");
+            }
+            accountInfo.stocks = stocks;
+            userFunc.getCOD([email], (err, codInfo) => {
+                if (err) {
+                    return res.status(500).send("Something on the serer went wrong");
+                }
+                accountInfo.cod = codInfo;
+                userFunc.getCyberpunk([email], (err, cyberpunkInfo) => {
+                    if (err) {
+                        return res.status(500).send("Something on the serer went wrong");
+                    }
+                    accountInfo.cyberpunk = cyberpunkInfo;
+                    userFunc.getD2([email], (err, d2Info) => {
+                        if (err) {
+                            return res.status(500).send("Something on the serer went wrong");
+                        }
+                        accountInfo.d2 = d2Info;
+                        userFunc.getNW([email], (err, nwInfo) => {
+                            if (err) {
+                                return res.status(500).send("Something on the serer went wrong");
+                            }
+                            accountInfo.nw = nwInfo;
+                            userFunc.getStellaris([email], (err, stellarisInfo) => {
+                                if (err) {
+                                    return res.status(500).send("Something on the serer went wrong");
+                                }
+                                accountInfo.stellaris = stellarisInfo;
+                                userFunc.getWoW([email], (err, wowInfo) => {
+                                    if (err) {
+                                        return res.status(500).send("Something on the serer went wrong");
+                                    }
+                                    accountInfo.wow = wowInfo;
+                                    res.status(200)
+                                        .send(accountInfo);
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+router.post("/addfunds", (req, res) => {
+    const email = req.body.email;
+    const funds = req.body.funds;
+    userFunc.verifyUserFunds(email, (err, userFunds) => {
+        if (err) {
+            return res.status(500).send("Something on the server went wrong!");
+        }
+        userFunc.updateFunds([email, funds], (err) => {
+            if (err) {
+                return res.status(500).send("Something on the serer went wrong");
+            }
+        });
+    });
+});
+
 router.get("/register", (req, res) => {
     let response = "Not logged in";
 
