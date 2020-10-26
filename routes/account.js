@@ -120,29 +120,31 @@ router.post("/sellstock", (req, res) => {
     //         return res.status(500).send("Something on the server went wrong!");
     //     }
     //     console.log("VERIFY")
-    userFunc.updateFunds([email, funds], (err) => {
+    userFunc.verifyUserStocks([stock, email], (err, row) => {
         if (err) {
             return res.status(500).send("Something on the serer went wrong");
         }
-        userFunc.verifyUserStocks([stock, email], (err, row) => {
-            if (err) {
-                return res.status(500).send("Something on the serer went wrong");
-            }
-            console.log(row.amount);
-            if (row.amount > 0) {
-                console.log("inne");
-                userFunc.sellStock([email, stock, -1], (err) => {
+        if (row.amount > 0) {
+            userFunc.updateFunds([email, funds], (err) => {
+                if (err) {
+                    return res.status(500).send("Something on the serer went wrong");
+                }
+                userFunc.verifyUserStocks([stock, email], (err, row) => {
                     if (err) {
                         return res.status(500).send("Something on the serer went wrong");
                     }
-                    return res.status(200);
+                    userFunc.sellStock([email, stock, -1], (err) => {
+                        if (err) {
+                            return res.status(500).send("Something on the serer went wrong");
+                        }
+                        return res.status(200);
+                    });
                 });
-            } else {
-                return res.send("You don't have enough stocks");
-            }
-        });
+            });
+        } else {
+            return res.send("You don't have enough stocks");
+        }
     });
-    // });
 });
 
 router.get("/register", (req, res) => {
