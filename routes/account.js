@@ -115,18 +115,24 @@ router.post("/sellstock", (req, res) => {
     const email = req.body.email;
     const stock = req.body.stock;
     const funds = req.body.price;
+    console.log(email);
+    console.log(stock);
+    console.log(funds);
     userFunc.verifyUserFunds(email, (err, userFunds) => {
         if (err) {
             return res.status(500).send("Something on the server went wrong!");
         }
+        console.log("VERIFY")
         userFunc.updateFunds([email, funds], (err) => {
             if (err) {
                 return res.status(500).send("Something on the serer went wrong");
             }
+            console.log("UPDATE")
             userFunc.sellStock([email, stock, -1], (err) => {
                 if (err) {
                     return res.status(500).send("Something on the serer went wrong");
                 }
+                console.log("SELL")
                 return res.status(200);
             });
         });
